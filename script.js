@@ -15,12 +15,18 @@ const observer = new IntersectionObserver(
   { threshold: 0.12 }
 );
 
-document.querySelectorAll(".section").forEach((el) => {
-  el.style.opacity = "0";
-  el.style.transform = "translateY(24px)";
-  el.style.transition = "opacity 0.7s ease, transform 0.7s ease";
-  observer.observe(el);
-});
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
+
+if (!prefersReducedMotion) {
+  document.querySelectorAll(".section").forEach((el) => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(24px)";
+    el.style.transition = "opacity 0.7s ease, transform 0.7s ease";
+    observer.observe(el);
+  });
+}
 
 /* ===== Лайтбокс для фотогалереи ===== */
 (function () {
@@ -35,7 +41,9 @@ document.querySelectorAll(".section").forEach((el) => {
   const photos = Array.from(
     document.querySelectorAll(".gallery__item--photo img")
   );
+  const focusable = [btnPrev, btnNext, btnClose];
   let current = 0;
+  let lastFocused = null;
 
   function show(i) {
     current = (i + photos.length) % photos.length;
@@ -47,16 +55,21 @@ document.querySelectorAll(".section").forEach((el) => {
   }
 
   function open(i) {
+    lastFocused = document.activeElement;
     show(i);
     lightbox.classList.add("is-open");
     lightbox.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
+    btnClose.focus();
   }
 
   function close() {
     lightbox.classList.remove("is-open");
     lightbox.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
+    if (lastFocused && typeof lastFocused.focus === "function") {
+      lastFocused.focus();
+    }
   }
 
   photos.forEach((img, i) => {
@@ -79,6 +92,18 @@ document.querySelectorAll(".section").forEach((el) => {
     if (e.key === "Escape") close();
     if (e.key === "ArrowLeft") show(current - 1);
     if (e.key === "ArrowRight") show(current + 1);
+    // Фокус-ловушка: Tab не выходит за пределы лайтбокса
+    if (e.key === "Tab") {
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   });
 })();
 
