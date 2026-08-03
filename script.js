@@ -2,24 +2,26 @@
 document.getElementById("year").textContent = new Date().getFullYear();
 
 // Плавное появление секций при прокрутке
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = "1";
-        entry.target.style.transform = "translateY(0)";
-        observer.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.12 }
-);
-
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
-if (!prefersReducedMotion) {
+// Анимируем только если браузер поддерживает IntersectionObserver и
+// пользователь не просил уменьшить движение — иначе контент просто виден.
+if (!prefersReducedMotion && "IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = "1";
+          entry.target.style.transform = "translateY(0)";
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 }
+  );
+
   document.querySelectorAll(".section").forEach((el) => {
     el.style.opacity = "0";
     el.style.transform = "translateY(24px)";

@@ -11,7 +11,7 @@
   --gold: #ffca3a;
   --sky: #6ec6ff;
   --accent: #ff7bac;
-  --accent-dark: #e85a92;
+  --accent-dark: #c23a6f; /* затемнён до контраста WCAG AA (5.09:1 на белом) */
   --card: #ffffff;
   --shadow: 0 12px 34px rgba(180, 90, 130, 0.14);
   --radius: 22px;
@@ -122,13 +122,14 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-.nav__links { display: flex; gap: 24px; }
+.nav__links { display: flex; flex-wrap: wrap; gap: 24px; }
 
 .nav__links a {
   color: var(--muted);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 600;
+  white-space: nowrap;
   transition: color 0.2s;
 }
 
@@ -250,7 +251,8 @@ body {
 }
 
 /* ===== Секции ===== */
-.section { padding: 80px 6vw; max-width: 1120px; margin: 0 auto; }
+.section { padding: 80px 6vw; max-width: 1120px; margin: 0 auto; scroll-margin-top: 84px; }
+.hero { scroll-margin-top: 84px; }
 .section--alt {
   background: linear-gradient(180deg, var(--bg-alt), #fff6fb);
   max-width: none;
@@ -353,7 +355,6 @@ body {
   transform: scale(1.05) rotate(-1.5deg);
   box-shadow: 0 18px 40px rgba(255, 123, 172, 0.28);
 }
-.gallery__item span { font-size: 3.4rem; display: block; margin-bottom: 10px; }
 .gallery__item figcaption { color: var(--muted); font-size: 0.95rem; font-weight: 600; }
 
 /* Реальное фото в галерее */

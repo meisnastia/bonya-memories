@@ -6,11 +6,25 @@
   <meta name="description" content="Сайт воспоминаний про Боню — британскую кошку. Наши самые тёплые моменты, фотографии и истории." />
   <meta name="theme-color" content="#fff8f2" />
   <title>Боня · Воспоминания о британской кошке</title>
+
+  <!-- Open Graph / соцсети -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:title" content="Боня · Воспоминания о британской кошке" />
+  <meta property="og:description" content="Сайт памяти о британской кошке Боне — тёплые фотографии, истории и воспоминания." />
+  <meta property="og:image" content="https://gentle-island-0ba77fb10.7.azurestaticapps.net/images/bonya-12.jpg" />
+  <meta property="og:image:alt" content="Боня — британская короткошёрстная кошка" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Боня · Воспоминания о британской кошке" />
+  <meta name="twitter:description" content="Сайт памяти о британской кошке Боне — тёплые фотографии, истории и воспоминания." />
+  <meta name="twitter:image" content="https://gentle-island-0ba77fb10.7.azurestaticapps.net/images/bonya-12.jpg" />
+
+  <link rel="preload" as="image" href="images/bonya-12.jpg" fetchpriority="high" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>" />
 </head>
 <body>
-  <a class="skip-link" href="#about">Перейти к содержимому</a>
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
 
   <!-- Плавающие декорации -->
   <div class="decor" aria-hidden="true">
@@ -32,6 +46,7 @@
     </nav>
   </header>
 
+  <main id="main">
   <!-- Герой -->
   <section class="hero">
     <div class="hero__inner">
@@ -282,6 +297,8 @@
     </p>
   </section>
 
+  </main>
+
   <footer class="footer">
     <p>Сделано с любовью в память о Боне 🐾</p>
     <p class="footer__small">© <span id="year"></span> · Воспоминания семьи</p>
@@ -291,7 +308,7 @@
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр фотографии" aria-hidden="true">
     <button class="lightbox__close" aria-label="Закрыть">✕</button>
     <button class="lightbox__nav lightbox__nav--prev" aria-label="Предыдущее фото">‹</button>
-    <img class="lightbox__img" src="" alt="" />
+    <img class="lightbox__img" alt="" />
     <button class="lightbox__nav lightbox__nav--next" aria-label="Следующее фото">›</button>
     <p class="lightbox__caption"></p>
   </div>
