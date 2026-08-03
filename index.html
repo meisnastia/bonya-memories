@@ -10,6 +10,12 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>" />
 </head>
 <body>
+  <!-- Плавающие декорации -->
+  <div class="decor" aria-hidden="true">
+    <span>🐾</span><span>💖</span><span>🐱</span><span>✨</span><span>🐾</span>
+    <span>🌸</span><span>😻</span><span>💕</span><span>🐾</span><span>⭐</span>
+  </div>
+
   <!-- Навигация -->
   <header class="nav" id="top">
     <a class="nav__brand" href="#top">🐾 Боня</a>
@@ -34,6 +40,7 @@
     </div>
     <figure class="hero__photo">
       <img src="images/bonya.jpg" alt="Боня — британская короткошёрстная кошка с янтарными глазами" loading="eager" />
+      <figcaption>Наша Боня 💕</figcaption>
     </figure>
   </section>
 
@@ -44,6 +51,50 @@
       Боня — настоящая британка: серо-голубая шубка, круглые янтарные глаза
       и знаменитая «недовольная» мордочка, за которой пряталось самое доброе сердце.
     </p>
+
+    <!-- Милый нарисованный котик -->
+    <svg class="cat-doodle" viewBox="0 0 240 200" role="img" aria-label="Нарисованный котик">
+      <defs>
+        <linearGradient id="furGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#b9c4d6"/>
+          <stop offset="1" stop-color="#8b9bb4"/>
+        </linearGradient>
+      </defs>
+      <!-- хвост -->
+      <path d="M188 150 q46 6 34 -44" fill="none" stroke="url(#furGrad)" stroke-width="18" stroke-linecap="round"/>
+      <!-- тело -->
+      <ellipse cx="120" cy="150" rx="66" ry="46" fill="url(#furGrad)"/>
+      <!-- уши -->
+      <path d="M74 96 L64 58 L100 82 Z" fill="url(#furGrad)"/>
+      <path d="M166 96 L176 58 L140 82 Z" fill="url(#furGrad)"/>
+      <path d="M78 90 L73 70 L92 84 Z" fill="#ff9ec7"/>
+      <path d="M162 90 L167 70 L148 84 Z" fill="#ff9ec7"/>
+      <!-- голова -->
+      <circle cx="120" cy="112" r="52" fill="url(#furGrad)"/>
+      <!-- щёчки -->
+      <circle cx="98" cy="128" r="15" fill="#ffb3c8" opacity="0.6"/>
+      <circle cx="142" cy="128" r="15" fill="#ffb3c8" opacity="0.6"/>
+      <!-- глаза -->
+      <circle cx="102" cy="108" r="11" fill="#3a2f3a"/>
+      <circle cx="138" cy="108" r="11" fill="#3a2f3a"/>
+      <circle cx="105" cy="104" r="4" fill="#fff"/>
+      <circle cx="141" cy="104" r="4" fill="#fff"/>
+      <!-- носик -->
+      <path d="M116 120 L124 120 L120 126 Z" fill="#ff7bac"/>
+      <!-- ротик -->
+      <path d="M120 126 q-8 10 -18 4 M120 126 q8 10 18 4" fill="none" stroke="#3a2f3a" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- усики -->
+      <g stroke="#b9a6b2" stroke-width="2" stroke-linecap="round">
+        <path d="M84 116 L58 110"/><path d="M84 122 L58 124"/>
+        <path d="M156 116 L182 110"/><path d="M156 122 L182 124"/>
+      </g>
+      <!-- лапки -->
+      <ellipse cx="98" cy="192" rx="16" ry="9" fill="#8b9bb4"/>
+      <ellipse cx="142" cy="192" rx="16" ry="9" fill="#8b9bb4"/>
+      <!-- сердечко -->
+      <path d="M200 60 q8 -12 16 0 q8 12 -16 22 q-24 -10 -16 -22 q8 -12 16 0" fill="#ff7bac"/>
+    </svg>
+
     <div class="cards">
       <article class="card">
         <div class="card__icon">💙</div>
