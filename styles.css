@@ -426,6 +426,91 @@ body {
 .footer p:first-child { font-size: 1.15rem; font-weight: 700; }
 .footer__small { color: rgba(255, 255, 255, 0.85); font-size: 0.85rem; margin-top: 8px; }
 
+/* ===== Лайтбокс ===== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 4vw;
+  background: rgba(58, 47, 58, 0.88);
+  backdrop-filter: blur(6px);
+}
+.lightbox.is-open { display: flex; animation: fadeIn 0.25s ease; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.lightbox__img {
+  max-width: 90vw;
+  max-height: 82vh;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 6px solid #fff;
+  animation: popIn 0.28s ease;
+}
+
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.lightbox__caption {
+  position: absolute;
+  bottom: 4vh;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, var(--lavender), var(--pink));
+  color: #fff;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.lightbox__close,
+.lightbox__nav {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--accent-dark);
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  font-weight: 800;
+  transition: transform 0.2s, background 0.2s;
+}
+.lightbox__close:hover,
+.lightbox__nav:hover { transform: scale(1.12); background: #fff; }
+
+.lightbox__close {
+  top: 3vh; right: 3vw;
+  width: 46px; height: 46px;
+  font-size: 1.2rem;
+}
+.lightbox__nav {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 54px; height: 54px;
+  font-size: 2rem;
+  line-height: 1;
+}
+.lightbox__nav:hover { transform: translateY(-50%) scale(1.12); }
+.lightbox__nav--prev { left: 3vw; }
+.lightbox__nav--next { right: 3vw; }
+
+/* ===== Разлетающиеся сердечки ===== */
+.heart-burst {
+  position: fixed;
+  z-index: 200;
+  font-size: 1.4rem;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: burst 0.9s ease-out forwards;
+}
+
+@keyframes burst {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(0.4); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.2); }
+}
+
 /* ===== Адаптив ===== */
 @media (max-width: 600px) {
   .nav__links { gap: 14px; font-size: 0.82rem; }

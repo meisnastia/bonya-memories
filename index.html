@@ -221,6 +221,15 @@
     <p class="footer__small">© <span id="year"></span> · Воспоминания семьи</p>
   </footer>
 
+  <!-- Лайтбокс для фото -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" aria-label="Закрыть">✕</button>
+    <button class="lightbox__nav lightbox__nav--prev" aria-label="Предыдущее фото">‹</button>
+    <img class="lightbox__img" src="" alt="" />
+    <button class="lightbox__nav lightbox__nav--next" aria-label="Следующее фото">›</button>
+    <p class="lightbox__caption"></p>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
