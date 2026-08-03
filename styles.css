@@ -59,16 +59,47 @@ body {
 .hero {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  gap: 50px;
   min-height: 82vh;
   text-align: center;
-  padding: 60px 6vw;
+  padding: 70px 6vw;
   background: radial-gradient(circle at 50% 30%, #ffffff 0%, var(--bg) 55%, var(--bg-alt) 100%);
   overflow: hidden;
 }
 
-.hero__inner { max-width: 640px; position: relative; z-index: 2; }
+.hero__inner { max-width: 560px; position: relative; z-index: 2; }
+
+/* Фото Бони в герое */
+.hero__photo {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+  width: min(340px, 78vw);
+  border-radius: 26px;
+  padding: 12px;
+  background: var(--card);
+  box-shadow: 0 22px 50px rgba(60, 50, 40, 0.18);
+  transform: rotate(2deg);
+  transition: transform 0.35s ease;
+}
+
+.hero__photo:hover { transform: rotate(0deg) scale(1.02); }
+
+.hero__photo img {
+  display: block;
+  width: 100%;
+  border-radius: 16px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+@media (min-width: 860px) {
+  .hero { text-align: left; }
+  .hero__eyebrow { margin-left: 2px; }
+}
 
 .hero__eyebrow {
   text-transform: uppercase;
@@ -106,20 +137,6 @@ body {
 
 .hero__cta:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(91, 125, 162, 0.35); }
 
-.hero__cat {
-  position: absolute;
-  bottom: -20px;
-  right: 8vw;
-  font-size: clamp(8rem, 22vw, 16rem);
-  opacity: 0.15;
-  z-index: 1;
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-18px); }
-}
 
 /* ===== Секции ===== */
 .section { padding: 80px 6vw; max-width: 1100px; margin: 0 auto; }
@@ -179,6 +196,17 @@ body {
 .gallery__item:hover { transform: scale(1.05) rotate(-1deg); }
 .gallery__item span { font-size: 3.4rem; display: block; margin-bottom: 10px; }
 .gallery__item figcaption { color: var(--muted); font-size: 0.95rem; }
+
+/* Реальное фото в галерее */
+.gallery__item--photo { padding: 12px; }
+.gallery__item--photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
 
 /* ===== Таймлайн ===== */
 .timeline { list-style: none; max-width: 700px; margin: 0 auto; position: relative; }
