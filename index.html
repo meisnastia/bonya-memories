@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Сайт воспоминаний про Боню — британскую кошку. Наши самые тёплые моменты, фотографии и истории." />
+  <title>Боня · Воспоминания о британской кошке</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>" />
+</head>
+<body>
+  <!-- Навигация -->
+  <header class="nav" id="top">
+    <a class="nav__brand" href="#top">🐾 Боня</a>
+    <nav class="nav__links">
+      <a href="#about">О Боне</a>
+      <a href="#gallery">Галерея</a>
+      <a href="#timeline">История</a>
+      <a href="#memories">Воспоминания</a>
+    </nav>
+  </header>
+
+  <!-- Герой -->
+  <section class="hero">
+    <div class="hero__inner">
+      <p class="hero__eyebrow">Британская короткошёрстная · пушистое чудо</p>
+      <h1 class="hero__title">Боня</h1>
+      <p class="hero__subtitle">
+        Маленькая королева с плюшевыми щеками и характером льва.
+        Здесь мы храним самые тёплые воспоминания о ней.
+      </p>
+      <a class="hero__cta" href="#memories">Читать воспоминания</a>
+    </div>
+    <div class="hero__cat" aria-hidden="true">🐱</div>
+  </section>
+
+  <!-- О Боне -->
+  <section class="section" id="about">
+    <h2 class="section__title">О нашей Боне</h2>
+    <p class="section__lead">
+      Боня — настоящая британка: серо-голубая шубка, круглые янтарные глаза
+      и знаменитая «недовольная» мордочка, за которой пряталось самое доброе сердце.
+    </p>
+    <div class="cards">
+      <article class="card">
+        <div class="card__icon">💙</div>
+        <h3>Характер</h3>
+        <p>Спокойная и величавая, но по вечерам превращалась в маленький ураган, гоняющий мячик по всей квартире.</p>
+      </article>
+      <article class="card">
+        <div class="card__icon">🍗</div>
+        <h3>Любимое дело</h3>
+        <p>Контролировать процесс готовки на кухне и требовать свою законную порцию курочки ровно в 18:00.</p>
+      </article>
+      <article class="card">
+        <div class="card__icon">🛋️</div>
+        <h3>Любимое место</h3>
+        <p>Тёплый плед у окна, откуда открывался лучший вид на птиц и проходящих мимо соседских собак.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Галерея -->
+  <section class="section section--alt" id="gallery">
+    <h2 class="section__title">Галерея настроений</h2>
+    <p class="section__lead">Каждая мордочка — отдельная история.</p>
+    <div class="gallery">
+      <figure class="gallery__item"><span>😺</span><figcaption>Утренний мурлыка</figcaption></figure>
+      <figure class="gallery__item"><span>😼</span><figcaption>«Где моя еда?»</figcaption></figure>
+      <figure class="gallery__item"><span>😻</span><figcaption>Обнимашки</figcaption></figure>
+      <figure class="gallery__item"><span>🙀</span><figcaption>Пылесос!</figcaption></figure>
+      <figure class="gallery__item"><span>😽</span><figcaption>Сладкий сон</figcaption></figure>
+      <figure class="gallery__item"><span>😸</span><figcaption>Поймала мячик</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- История -->
+  <section class="section" id="timeline">
+    <h2 class="section__title">Наша история вместе</h2>
+    <ol class="timeline">
+      <li class="timeline__item">
+        <span class="timeline__dot"></span>
+        <h3>День знакомства</h3>
+        <p>Крошечный пушистый комочек, который умещался на ладони и сразу замурлыкал.</p>
+      </li>
+      <li class="timeline__item">
+        <span class="timeline__dot"></span>
+        <h3>Первый Новый год</h3>
+        <p>Ёлка была объявлена личной игрушкой. Ни один шарик не устоял.</p>
+      </li>
+      <li class="timeline__item">
+        <span class="timeline__dot"></span>
+        <h3>Любимое кресло</h3>
+        <p>Боня выбрала себе трон и с тех пор делила его с нами очень неохотно.</p>
+      </li>
+      <li class="timeline__item">
+        <span class="timeline__dot"></span>
+        <h3>Тысячи тёплых вечеров</h3>
+        <p>Мурчание под пледом, которое лечило любой тяжёлый день.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Воспоминания -->
+  <section class="section section--alt" id="memories">
+    <h2 class="section__title">Тёплые воспоминания</h2>
+    <div class="quotes">
+      <blockquote class="quote">
+        «Она всегда знала, когда мне грустно, и приходила греть своим мурчанием.»
+      </blockquote>
+      <blockquote class="quote">
+        «Боня встречала у двери каждый вечер — важная, как настоящая хозяйка дома.»
+      </blockquote>
+      <blockquote class="quote">
+        «Её плюшевые щёки и серьёзный взгляд невозможно забыть.»
+      </blockquote>
+    </div>
+    <p class="memories__epilogue">
+      Спасибо тебе, Боня, за каждый мурлыкающий момент. Ты навсегда в наших сердцах. 💙
+    </p>
+  </section>
+
+  <footer class="footer">
+    <p>Сделано с любовью в память о Боне 🐾</p>
+    <p class="footer__small">© <span id="year"></span> · Воспоминания семьи</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
