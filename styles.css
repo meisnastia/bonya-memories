@@ -170,9 +170,9 @@ body {
 .hero__photo {
   position: relative;
   flex: 0 0 auto;
-  width: min(350px, 80vw);
+  width: min(460px, 90vw);
   border-radius: 28px;
-  padding: 14px;
+  padding: 18px;
   background: #fff;
   box-shadow: 0 26px 55px rgba(180, 90, 130, 0.28);
   transform: rotate(2deg);
@@ -192,24 +192,25 @@ body {
 
 .hero__photo:hover { transform: rotate(0deg) scale(1.02); }
 
-.hero__photo img {
+..hero__photo img {
   display: block;
   width: 100%;
   border-radius: 18px;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
+  object-position: center top;
 }
 
 .hero__photo figcaption {
   position: absolute;
-  bottom: -14px;
+  bottom: -16px;
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(90deg, var(--lavender), var(--pink));
   color: #fff;
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   font-weight: 700;
-  padding: 6px 16px;
+  padding: 8px 20px;
   border-radius: 999px;
   white-space: nowrap;
   box-shadow: 0 8px 18px rgba(155, 140, 255, 0.4);
