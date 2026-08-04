@@ -1,13 +1,24 @@
 version: 2
 updates:
-  # Обновления GitHub Actions (в т.ч. пин версий/SHA)
+  # GitHub Actions — supply-chain безопасность (одним сгруппированным PR)
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 3
+    groups:
+      github-actions:
+        patterns: ["*"]
 
-  # Обновления npm dev-зависимостей (линтеры и т.п.)
+  # npm dev-зависимости (линтеры) — одним PR, без ломающих мажорных версий
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 3
+    groups:
+      dev-dependencies:
+        patterns: ["*"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
