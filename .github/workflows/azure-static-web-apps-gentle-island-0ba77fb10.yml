@@ -1,23 +1,22 @@
 name: CI/CD — Azure Static Web Apps (GitHub)
 
-# Полноценный конвейер: lint → test → security выполняются параллельно,
-# затем deploy (ждёт все три), затем post-deploy smoke-тест против живого сайта.
+# Конвейер: lint / test / security гоняются на push И на pull_request
+# (валидация), а деплой и smoke — ТОЛЬКО на push в main.
+# Так PR (в т.ч. от Dependabot и форков) не имеют доступа к секретам
+# и не могут задеплоить недоверенный код — это best practice безопасности.
 
 on:
   push:
     branches: [main]
   pull_request:
-    types: [opened, synchronize, reopened, closed]
     branches: [main]
 
 permissions:
   contents: read
-  pull-requests: write   # для комментария с preview-URL на PR
 
 jobs:
-  # ---------- Стадия 1: Lint ----------
+  # ---------- Lint ----------
   lint:
-    if: github.event_name == 'push' || github.event.action != 'closed'
     runs-on: ubuntu-latest
     name: Lint (HTML/CSS/JS)
     steps:
@@ -29,9 +28,8 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
-  # ---------- Стадия 2: Test ----------
+  # ---------- Test ----------
   test:
-    if: github.event_name == 'push' || github.event.action != 'closed'
     runs-on: ubuntu-latest
     name: Unit tests
     steps:
@@ -49,9 +47,8 @@ jobs:
           path: junit.xml
           if-no-files-found: ignore
 
-  # ---------- Стадия 3: Security ----------
+  # ---------- Security ----------
   security:
-    if: github.event_name == 'push' || github.event.action != 'closed'
     runs-on: ubuntu-latest
     name: Security scan
     steps:
@@ -71,16 +68,15 @@ jobs:
           tar -xzf gitleaks.tar.gz gitleaks
           ./gitleaks dir . --redact --exit-code 1
 
-  # ---------- Стадия 4: Deploy ----------
+  # ---------- Deploy (только push в main) ----------
   build_and_deploy_job:
     needs: [lint, test, security]
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     name: Build and Deploy
     permissions:
-      id-token: write        # для OIDC-аутентификации в Azure SWA
+      id-token: write        # OIDC-аутентификация в Azure SWA
       contents: read
-      pull-requests: write   # комментарий с preview-URL на PR
     steps:
       - uses: actions/checkout@v4
         with:
@@ -99,7 +95,6 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_ISLAND_0BA77FB10 }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: upload
           app_location: "/"        # корень репозитория (index.html)
           api_location: ""         # бэкенд-функций нет
@@ -107,7 +102,7 @@ jobs:
           skip_app_build: true     # статический сайт
           github_id_token: ${{ steps.idtoken.outputs.result }}
 
-  # ---------- Стадия 5: Post-deploy smoke test ----------
+  # ---------- Post-deploy smoke test (только push) ----------
   smoke_test_job:
     needs: build_and_deploy_job
     if: github.event_name == 'push'
@@ -122,15 +117,3 @@ jobs:
         run: node scripts/smoke.mjs
         env:
           SMOKE_BASE_URL: https://gentle-island-0ba77fb10.7.azurestaticapps.net
-
-  # ---------- Закрытие PR (удаление preview-окружения) ----------
-  close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    name: Close Pull Request
-    steps:
-      - name: Close Pull Request
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          action: close
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_ISLAND_0BA77FB10 }}
