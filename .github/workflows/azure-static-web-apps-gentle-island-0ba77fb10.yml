@@ -20,8 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint (HTML/CSS/JS)
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: 'npm'
@@ -33,15 +33,15 @@ jobs:
     runs-on: ubuntu-latest
     name: Unit tests
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
       - run: npm run test:ci
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: junit-results
           path: junit.xml
@@ -52,8 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Security scan
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: 'npm'
@@ -78,13 +78,13 @@ jobs:
       id-token: write        # OIDC-аутентификация в Azure SWA
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: true
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
       - name: Get Id Token
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         id: idtoken
         with:
           script: |
@@ -109,8 +109,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Post-deploy smoke test
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
       - name: Smoke-тест против живого сайта
