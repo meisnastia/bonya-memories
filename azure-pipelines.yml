@@ -1,5 +1,9 @@
-# Azure DevOps Pipeline — многостадийный CI/CD для Azure Static Web Apps.
-# Зеркалит GitHub Actions конвейер: Validate (lint/test/security) → Deploy → Smoke.
+# Azure DevOps Pipeline — CI/CD для Azure Static Web Apps.
+# Все проверки — ШАГАМИ внутри минимального числа джоб: бесплатный тариф ADO
+# даёт лишь 1 параллельный Microsoft-hosted агент, поэтому дробить на много
+# джоб нет смысла (только очередь и лишние ожидания агента).
+#   Стадия Validate: lint → test → security (шаги)
+#   Стадия Deploy:   deploy → post-deploy smoke (шаги, один агент)
 
 trigger:
   branches:
@@ -10,73 +14,62 @@ pool:
   vmImage: ubuntu-latest      # AzureStaticWebApp@0 работает только на Linux
 
 variables:
-  # URL живого SWA (не секрет) — для post-deploy smoke-теста.
   SMOKE_BASE_URL: https://witty-ground-06bccd310.7.azurestaticapps.net
-  # deployment_token задан как СЕКРЕТНАЯ переменная пайплайна (не в коде).
+  # deployment_token — СЕКРЕТНАЯ переменная пайплайна (не в коде).
 
 stages:
-  # ---------- Стадия 1: Validate (параллельные джобы) ----------
+  # ---------- Стадия 1: Validate (lint + test + security как шаги) ----------
   - stage: Validate
-    displayName: Проверки (lint / test / security)
+    displayName: Проверки
     jobs:
-      - job: lint
-        displayName: Lint (HTML/CSS/JS)
+      - job: checks
+        displayName: lint · test · security
         steps:
           - task: NodeTool@0
+            displayName: Node.js 20
             inputs:
               versionSpec: '20.x'
           - script: npm ci
             displayName: npm ci
-          - script: npm run lint
-            displayName: html-validate + stylelint + eslint
 
-      - job: test
-        displayName: Unit tests
-        steps:
-          - task: NodeTool@0
-            inputs:
-              versionSpec: '20.x'
-          - script: npm ci
-            displayName: npm ci
+          # -- Lint --
+          - script: npm run lint
+            displayName: 'Lint: html-validate + stylelint + eslint'
+
+          # -- Test (+ публикация JUnit) --
           - script: npm run test:ci
-            displayName: node --test (JUnit)
+            displayName: 'Test: node --test (JUnit)'
           - task: PublishTestResults@2
+            displayName: Публикация результатов тестов
             condition: succeededOrFailed()
             inputs:
               testResultsFormat: 'JUnit'
               testResultsFiles: 'junit.xml'
               testRunTitle: 'Unit tests'
 
-      - job: security
-        displayName: Security scan
-        steps:
-          - task: NodeTool@0
-            inputs:
-              versionSpec: '20.x'
-          - script: npm ci
-            displayName: npm ci
+          # -- Security --
           - script: npm audit --omit=dev --audit-level=high
-            displayName: npm audit (prod-зависимости, high+)
+            displayName: 'Security: npm audit (high+)'
           - script: |
               VERSION=8.28.0
               curl -sSL -o gitleaks.tar.gz \
                 https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_x64.tar.gz
               tar -xzf gitleaks.tar.gz gitleaks
               ./gitleaks dir . --redact --exit-code 1
-            displayName: Gitleaks — поиск секретов
+            displayName: 'Security: gitleaks (поиск секретов)'
 
-  # ---------- Стадия 2: Deploy ----------
+  # ---------- Стадия 2: Deploy + post-deploy smoke ----------
   - stage: Deploy
-    displayName: Деплой в Static Web App
+    displayName: Деплой и smoke-тест
     dependsOn: Validate
     condition: succeeded()
     jobs:
       - job: deploy
-        displayName: AzureStaticWebApp
+        displayName: deploy · smoke
         steps:
           - checkout: self
           - task: AzureStaticWebApp@0
-            displayName: Загрузка в Static Web App
+            displayName: 'Deploy: Azure Static Web App'
             inputs:
               app_location: "/"
               api_location: ""
@@ -85,20 +78,11 @@ stages:
               skip_api_build: true
             env:
               azure_static_web_apps_api_token: $(deployment_token)
-
-  # ---------- Стадия 3: Post-deploy smoke test ----------
-  - stage: Smoke
-    displayName: Smoke-тест живого сайта
-    dependsOn: Deploy
-    condition: succeeded()
-    jobs:
-      - job: smoke
-        displayName: Проверка живого сайта
-        steps:
           - task: NodeTool@0
+            displayName: Node.js 20
             inputs:
               versionSpec: '20.x'
           - script: node scripts/smoke.mjs
-            displayName: node scripts/smoke.mjs
+            displayName: 'Post-deploy: smoke-тест живого сайта'
             env:
               SMOKE_BASE_URL: $(SMOKE_BASE_URL)
