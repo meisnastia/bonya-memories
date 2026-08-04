@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Обновления GitHub Actions (в т.ч. пин версий/SHA)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Обновления npm dev-зависимостей (линтеры и т.п.)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"

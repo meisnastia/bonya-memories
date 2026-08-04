@@ -1,0 +1,15 @@
+title = "Bonya Memories — gitleaks config"
+
+# Используем стандартный набор правил gitleaks + свой аллоулист.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Игнорируем заведомо не-секреты (ложные срабатывания)"
+paths = [
+  '''package-lock\.json''',
+]
+regexes = [
+  # Прозрачный 1x1 data-URI фавикона в лайтбоксе — не секрет
+  '''data:image/[a-z]+;base64,[A-Za-z0-9+/=]+''',
+]

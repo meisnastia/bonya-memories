@@ -1,6 +1,5 @@
-# Azure DevOps Pipeline — деплой статического сайта в Azure Static Web Apps.
-# Это ADO-аналог GitHub Actions workflow (.github/workflows/*.yml).
-# Запускается на каждый push в ветку main.
+# Azure DevOps Pipeline — многостадийный CI/CD для Azure Static Web Apps.
+# Зеркалит GitHub Actions конвейер: Validate (lint/test/security) → Deploy → Smoke.
 
 trigger:
   branches:
@@ -8,19 +7,98 @@ trigger:
       - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: ubuntu-latest      # AzureStaticWebApp@0 работает только на Linux
 
-steps:
-  - checkout: self
-    displayName: Checkout репозитория
+variables:
+  # URL живого SWA (не секрет) — для post-deploy smoke-теста.
+  SMOKE_BASE_URL: https://witty-ground-06bccd310.7.azurestaticapps.net
+  # deployment_token задан как СЕКРЕТНАЯ переменная пайплайна (не в коде).
 
-  - task: AzureStaticWebApp@0
-    displayName: Сборка и деплой в Static Web App
-    inputs:
-      app_location: "/"        # корень репозитория — там index.html
-      api_location: ""         # бэкенд-функций нет
-      output_location: ""      # сборки нет, отдаём как есть
-      skip_app_build: true     # статический сайт — Oryx-сборка не нужна
-    env:
-      # Токен деплоя берётся из секретной переменной пайплайна (не хранится в коде).
-      azure_static_web_apps_api_token: $(deployment_token)
+stages:
+  # ---------- Стадия 1: Validate (параллельные джобы) ----------
+  - stage: Validate
+    displayName: Проверки (lint / test / security)
+    jobs:
+      - job: lint
+        displayName: Lint (HTML/CSS/JS)
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+          - script: npm ci
+            displayName: npm ci
+          - script: npm run lint
+            displayName: html-validate + stylelint + eslint
+
+      - job: test
+        displayName: Unit tests
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+          - script: npm ci
+            displayName: npm ci
+          - script: npm run test:ci
+            displayName: node --test (JUnit)
+          - task: PublishTestResults@2
+            condition: succeededOrFailed()
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: 'junit.xml'
+              testRunTitle: 'Unit tests'
+
+      - job: security
+        displayName: Security scan
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+          - script: npm ci
+            displayName: npm ci
+          - script: npm audit --omit=dev --audit-level=high
+            displayName: npm audit (prod-зависимости, high+)
+          - script: |
+              VERSION=8.28.0
+              curl -sSL -o gitleaks.tar.gz \
+                https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_x64.tar.gz
+              tar -xzf gitleaks.tar.gz gitleaks
+              ./gitleaks dir . --redact --exit-code 1
+            displayName: Gitleaks — поиск секретов
+
+  # ---------- Стадия 2: Deploy ----------
+  - stage: Deploy
+    displayName: Деплой в Static Web App
+    dependsOn: Validate
+    condition: succeeded()
+    jobs:
+      - job: deploy
+        displayName: AzureStaticWebApp
+        steps:
+          - checkout: self
+          - task: AzureStaticWebApp@0
+            displayName: Загрузка в Static Web App
+            inputs:
+              app_location: "/"
+              api_location: ""
+              output_location: ""     # пусто при skip_app_build
+              skip_app_build: true
+              skip_api_build: true
+            env:
+              azure_static_web_apps_api_token: $(deployment_token)
+
+  # ---------- Стадия 3: Post-deploy smoke test ----------
+  - stage: Smoke
+    displayName: Smoke-тест живого сайта
+    dependsOn: Deploy
+    condition: succeeded()
+    jobs:
+      - job: smoke
+        displayName: Проверка живого сайта
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+          - script: node scripts/smoke.mjs
+            displayName: node scripts/smoke.mjs
+            env:
+              SMOKE_BASE_URL: $(SMOKE_BASE_URL)

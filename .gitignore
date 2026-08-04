@@ -15,3 +15,12 @@
 
 # Временные файлы
 *.tmp
+
+# Зависимости и артефакты сборки/тестов
+node_modules/
+junit.xml
+coverage/
+
+# Бинарники сканеров (скачиваются в CI)
+gitleaks
+gitleaks.tar.gz

@@ -12,7 +12,7 @@
   --sky: #6ec6ff;
   --accent: #ff7bac;
   --accent-dark: #c23a6f; /* затемнён до контраста WCAG AA (5.09:1 на белом) */
-  --card: #ffffff;
+  --card: #fff;
   --shadow: 0 12px 34px rgba(180, 90, 130, 0.14);
   --radius: 22px;
 }
