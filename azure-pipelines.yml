@@ -1,0 +1,26 @@
+# Azure DevOps Pipeline — деплой статического сайта в Azure Static Web Apps.
+# Это ADO-аналог GitHub Actions workflow (.github/workflows/*.yml).
+# Запускается на каждый push в ветку main.
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+    displayName: Checkout репозитория
+
+  - task: AzureStaticWebApp@0
+    displayName: Сборка и деплой в Static Web App
+    inputs:
+      app_location: "/"        # корень репозитория — там index.html
+      api_location: ""         # бэкенд-функций нет
+      output_location: ""      # сборки нет, отдаём как есть
+      skip_app_build: true     # статический сайт — Oryx-сборка не нужна
+    env:
+      # Токен деплоя берётся из секретной переменной пайплайна (не хранится в коде).
+      azure_static_web_apps_api_token: $(deployment_token)
