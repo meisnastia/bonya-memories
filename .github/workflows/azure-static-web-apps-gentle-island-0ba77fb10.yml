@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint (HTML/CSS/JS)
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Unit tests
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Security scan
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -78,7 +78,7 @@ jobs:
       id-token: write        # OIDC-аутентификация в Azure SWA
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: true
       - name: Install OIDC Client from Core Package
@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Post-deploy smoke test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
